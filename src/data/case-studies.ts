@@ -83,6 +83,16 @@ export const caseStudies: Record<string, CaseStudy> = {
             "fine-tuned efficientnet_lite0, 15 epochs, official manually-verified test split",
         },
         {
+          label: "Gain from fine-tuning the backbone",
+          value: "+14.0 points",
+          method:
+            "A linear probe on the frozen ImageNet features reaches 71.75% top-1, so " +
+            "unfreezing the backbone is worth a measured amount rather than an assumed " +
+            "one. The naive version of this comparison — an untrained head — scores " +
+            "1.08%, which is chance on 101 classes and would have made the number " +
+            "meaningless.",
+        },
+        {
           label: "Model size",
           value: "13.3MB",
           method: "ONNX export, opset 17, dynamic batch dimension",
