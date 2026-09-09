@@ -23,7 +23,7 @@ const study = caseStudies[project.slug];
         <p class="status" data-live={project.live ? "true" : "false"}>{project.status}</p>
         <p class="lede measure">{study ? study.lede : project.summary}</p>
         {!study && <p class="measure muted">{project.detail}</p>}
-        <p class="tech">{project.tags.join(" · ")}</p>
+        <ul class="tech">{project.tags.map((t) => <li>{t}</li>)}</ul>
 
         {study?.links && (
           <p class="links">
@@ -139,25 +139,25 @@ const study = caseStudies[project.slug];
 
 <style>
   .head { padding-block: 2.5rem 0; }
-  .crumb { font-family: var(--font-mono); font-size: var(--t-micro); margin-bottom: 1.5rem; }
+  .crumb { font-size: var(--t-fine); margin-bottom: 1.5rem; }
   .head h1 { margin-bottom: .75rem; }
 
   .status {
     margin: 0 0 1.5rem;
-    font-family: var(--font-mono);
-    font-size: var(--t-micro);
+    font-size: var(--t-fine);
     color: var(--muted);
   }
-  .status[data-live="true"] { color: var(--known); }
+  .status[data-live="true"] { color: var(--trace); }
 
   .lede { font-size: 1.1rem; }
 
   .tech {
-    font-family: var(--font-mono);
-    font-size: var(--t-micro);
+    display: flex; flex-wrap: wrap; gap: 0 .5rem;
+    list-style: none; margin: 0 0 1.25rem; padding: 0;
+    font-size: var(--t-fine);
     color: var(--faint);
-    margin-bottom: 1.25rem;
   }
+  .tech li:not(:last-child)::after { content: ","; }
 
   .links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: var(--t-small); margin: 0; }
 
@@ -182,12 +182,17 @@ const study = caseStudies[project.slug];
     font-family: var(--font-mono);
     font-size: 1.05rem;
     font-variant-numeric: tabular-nums;
-    color: var(--known);
+    color: var(--trace);
     min-width: 8.5rem;
   }
+  /* An unmeasured figure is drawn but not filled in: the slot exists and
+     is visibly empty, which is the honest rendering of "not measured yet". */
   .metric[data-measured="false"] .metric__value {
-    color: var(--faint);
-    font-size: var(--t-small);
+    color: var(--muted);
+    font-size: var(--t-fine);
+    font-family: var(--font-sans);
+    border: 1px dashed var(--faint);
+    padding: .05rem .45rem;
   }
 
   .metric__label { font-size: var(--t-small); }
@@ -221,14 +226,11 @@ const study = caseStudies[project.slug];
 
   .tag {
     display: inline-block;
-    font-family: var(--font-mono);
-    font-size: var(--t-micro);
+    font-size: var(--t-fine);
     color: var(--faint);
     margin-right: .6rem;
-    text-transform: uppercase;
-    letter-spacing: .04em;
   }
-  .tag--chose { color: var(--novel); }
+  .tag--chose { color: var(--trace); }
 
   /* ── Stories & limits ───────────────────────────────────────────── */
 
@@ -237,7 +239,7 @@ const study = caseStudies[project.slug];
   .story:last-child { border-bottom: 1px solid var(--rule); }
   .story h3 { font-size: 1.05rem; margin-bottom: .6rem; }
   .story p { font-size: var(--t-small); margin-bottom: 0; }
-  .story__link { margin-top: .7rem; font-family: var(--font-mono); font-size: var(--t-micro); }
+  .story__link { margin-top: .7rem; font-size: var(--t-fine); }
 
   .limits { margin-top: 1.5rem; padding-left: 1.1rem; font-size: var(--t-small); }
   .limits li { margin-bottom: .7rem; }

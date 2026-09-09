@@ -1,0 +1,304 @@
+---
+import { SCAN_LO, SCAN_HI, HITS, TEMP_RECORD, INTERVAL_MIN, toCelsius, toFahrenheit, hex } from "../data/bigdata-scan";
+
+const cells = Array.from({ length: SCAN_HI - SCAN_LO + 1 }, (_, i) => {
+  const t = SCAN_LO + i;
+  const hit = HITS[t];
+  return { t, label: hex(t), state: hit ? (hit.documented ? "known" : "novel") : "dead" };
+});
+
+const W = 680, H = 118, PAD = 5;
+const live = TEMP_RECORD.filter((v) => v > 0);
+const lo = Math.min(...live), hi = Math.max(...live);
+const px = (i: number) => PAD + (i / (TEMP_RECORD.length - 1)) * (W - PAD * 2);
+const py = (v: number) => PAD + (1 - (v - lo) / (hi - lo)) * (H - PAD * 2);
+
+// The pen lifts at every empty slot, so the trace breaks instead of diving.
+let path = "", down = false;
+for (const [i, v] of TEMP_RECORD.entries()) {
+  if (v === 0) { down = false; continue; }
+  path += `${down ? "L" : "M"}${px(i).toFixed(1)},${py(v).toFixed(1)} `;
+  down = true;
+}
+
+const clock = (i: number) => {
+  const m = i * INTERVAL_MIN;
+  return `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+};
+const h2 = (v: number) => v.toString(16).padStart(2, "0");
+---
+
+<figure class="scan" data-scan>
+  <figcaption class="scan__head">
+    <p>
+      The service answers <code>bc &lt;type&gt; 01 00 ff 00 ff</code>. Every byte
+      from <code>{hex(SCAN_LO)}</code> to <code>{hex(SCAN_HI)}</code>, one at a time.
+    </p>
+    <button type="button" data-run>Run the scan</button>
+  </figcaption>
+
+  <div class="scan__body">
+    <div class="scan__grid" role="group" aria-label="Big data type scan results">
+      {cells.map((c) => (
+        <button type="button" class="cell" data-cell data-type={c.t}
+                data-state={c.state} disabled aria-label={`Type ${c.label}`}>
+          <span>{c.label}</span>
+        </button>
+      ))}
+    </div>
+    <div class="wire" data-wire aria-hidden="true"></div>
+  </div>
+
+  <p class="scan__status" data-status aria-live="polite">Thirty-two types unprobed.</p>
+
+  <div class="detail" data-detail hidden>
+    <div class="detail__meta">
+      <h3><code data-d-hex></code> <span data-d-name></span></h3>
+      <p class="detail__tag" data-d-tag></p>
+      <p data-d-note></p>
+      <p class="detail__layout">Record layout <code data-d-layout></code></p>
+    </div>
+
+    <div class="record" data-record hidden>
+      <p class="record__title">
+        Body temperature, 31 August 2026. Converted with
+        <code>celsius = raw / 10 + 20</code>.
+        <span class="record__count"><span data-count>0</span> of 48 slots</span>
+      </p>
+      <svg viewBox={`0 0 ${W} ${H}`} class="record__chart" role="img"
+           aria-label={`Body temperature across one day, ${toCelsius(lo).toFixed(1)} to ${toCelsius(hi).toFixed(1)} degrees celsius`}>
+        <path data-line d={path.trim()} fill="none" stroke="currentColor" stroke-width="1.75"
+              stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+      </svg>
+      <div class="record__axis"><span>00:00</span><span>12:00</span><span>23:30</span></div>
+
+      <div class="record__bytes">
+        {TEMP_RECORD.map((v, i) => (
+          <span class="byte" data-byte data-zero={v === 0}
+                title={v === 0 ? `${clock(i)}, no measurement`
+                               : `${clock(i)}, raw ${v} = ${toCelsius(v).toFixed(1)} °C (${toFahrenheit(v).toFixed(1)} °F)`}>{h2(v)}</span>
+        ))}
+      </div>
+
+      <p class="record__foot">
+        43 of the 48 slots carry a reading. A <code>00</code> means the ring
+        took no measurement, not a body temperature of 20 °C, which is why the
+        trace breaks rather than dropping. The day runs
+        {" "}{toCelsius(lo).toFixed(1)} to {toCelsius(hi).toFixed(1)} °C.
+      </p>
+    </div>
+  </div>
+</figure>
+
+<script>
+  import { HITS, TEMP_RECORD, hex } from "../data/bigdata-scan";
+
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  const h2 = (v: number) => v.toString(16).padStart(2, "0");
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-scan]")) {
+    const cells = [...root.querySelectorAll<HTMLButtonElement>("[data-cell]")];
+    const bytes = [...root.querySelectorAll<HTMLElement>("[data-byte]")];
+    const run = root.querySelector<HTMLButtonElement>("[data-run]")!;
+    const wire = root.querySelector<HTMLElement>("[data-wire]")!;
+    const status = root.querySelector<HTMLElement>("[data-status]")!;
+    const detail = root.querySelector<HTMLElement>("[data-detail]")!;
+    const record = root.querySelector<HTMLElement>("[data-record]")!;
+    const line = root.querySelector<SVGPathElement>("[data-line]")!;
+    const count = root.querySelector<HTMLElement>("[data-count]")!;
+    const q = (s: string) => root.querySelector<HTMLElement>(s)!;
+
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let ran = false;
+
+    const len = line.getTotalLength();
+    line.style.strokeDasharray = `${len}`;
+    line.style.strokeDashoffset = `${len}`;
+
+    function log(dir: "tx" | "rx", text: string, tone = "") {
+      const row = document.createElement("div");
+      row.className = "wire__row";
+      if (tone) row.dataset.tone = tone;
+      row.innerHTML = `<span class="wire__dir">${dir}</span><span>${text}</span>`;
+      wire.append(row);
+      wire.scrollTop = wire.scrollHeight;
+      while (wire.childElementCount > 120) wire.firstElementChild!.remove();
+    }
+
+    function show(type: number) {
+      const h = HITS[type];
+      if (!h) return;
+      for (const c of cells) c.classList.toggle("is-open", +c.dataset.type! === type);
+      q("[data-d-hex]").textContent = hex(type);
+      q("[data-d-name]").textContent = h.name;
+      const tag = q("[data-d-tag]");
+      tag.textContent = h.documented
+        ? "Already implemented in the community client."
+        : "Not described in any public documentation.";
+      tag.dataset.novel = String(!h.documented);
+      q("[data-d-note]").textContent = h.note;
+      q("[data-d-layout]").textContent = h.layout;
+      record.hidden = type !== 0x25;
+      detail.hidden = false;
+    }
+
+    /** Stream the 48-slot payload in, drawing the trace as each byte lands. */
+    async function streamPayload() {
+      let readings = 0;
+      for (const [i, el] of bytes.entries()) {
+        el.dataset.in = "true";
+        if (TEMP_RECORD[i] > 0) readings++;
+        count.textContent = String(i + 1);
+        line.style.strokeDashoffset = `${len * (1 - (i + 1) / bytes.length)}`;
+        if (!reduced) await wait(22);
+      }
+      count.textContent = "48";
+      line.style.strokeDashoffset = "0";
+      log("rx", `payload complete, ${readings} readings and ${48 - readings} empty slots`, "novel");
+    }
+
+    async function scan() {
+      if (ran) return;
+      ran = true;
+      run.disabled = true;
+      run.textContent = "Scanning";
+
+      let dead = 0;
+      for (const cell of cells) {
+        const type = +cell.dataset.type!;
+        const hit = HITS[type];
+        const hx = h2(type);
+
+        log("tx", `bc <b>${hx}</b> 01 00 ff 00 ff`);
+        if (!reduced) await wait(46);
+
+        cell.dataset.probed = "true";
+        cell.disabled = !hit;
+
+        if (hit) {
+          const n = type === 0x25 ? 50 : type === 0x2a ? 49 : 0;
+          log("rx",
+            `bc <b>${hx}</b> ${n ? h2(n) + " 00" : "&mdash;&mdash;"} ·· ·· &nbsp;<b>${n || "var"} B</b> &nbsp;${hit.name}`,
+            hit.documented ? "known" : "novel");
+          status.innerHTML = `Type <b>${hex(type)}</b> answered with data.`;
+        } else {
+          dead++;
+          log("rx", `01 &nbsp;status`, "dead");
+          status.textContent = `${dead} types returned a one-byte status.`;
+        }
+        if (!reduced) await wait(hit ? 300 : 22);
+      }
+
+      run.textContent = "Scan complete";
+      status.innerHTML =
+        `29 of 32 returned a one-byte status. Three carry data, and <b>0x25 is described nowhere.</b> Select a byte to inspect it.`;
+
+      show(0x25);
+      if (!reduced) await wait(320);
+      await streamPayload();
+    }
+
+    run.addEventListener("click", scan);
+    for (const cell of cells) cell.addEventListener("click", () => show(+cell.dataset.type!));
+
+    new IntersectionObserver((es, obs) => {
+      for (const e of es) if (e.isIntersecting) { obs.disconnect(); scan(); }
+    }, { threshold: 0.3 }).observe(root);
+  }
+</script>
+
+<style>
+  .scan { margin: 0; border: 1px solid var(--rule); background: var(--surface); }
+
+  .scan__head {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 1rem; padding: .9rem 1.15rem; border-bottom: 1px solid var(--rule);
+  }
+  .scan__head p { margin: 0; font-size: var(--t-small); color: var(--muted); max-width: 54ch; }
+
+  [data-run] {
+    flex: none; font: inherit; font-size: var(--t-small); padding: .4rem .85rem;
+    border: 1px solid var(--ink); background: var(--ink); color: var(--paper); cursor: pointer;
+  }
+  [data-run]:hover:not(:disabled) { background: var(--trace); border-color: var(--trace); }
+  [data-run]:disabled { opacity: .35; cursor: default; }
+
+  .scan__body { display: grid; grid-template-columns: minmax(0, 14.5rem) minmax(0, 1fr); }
+
+  .scan__grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--rule);
+    border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  }
+
+  /* Unprobed and dead bytes are hollow. The one undocumented answer is the
+     only filled square on the page — that inversion is the whole point. */
+  .cell {
+    padding: .5rem .2rem; border: 0; background: var(--surface); color: var(--faint);
+    font-family: var(--font-mono); font-size: .72rem; text-align: center;
+    cursor: default; transition: background .15s, color .15s;
+  }
+  .cell[data-probed][data-state="dead"]  { color: var(--faint); background: var(--paper-sunk); }
+  .cell[data-probed][data-state="known"] { color: var(--trace); background: var(--surface); cursor: pointer; font-weight: 600; }
+  .cell[data-probed][data-state="novel"] { color: var(--paper); background: var(--ink); cursor: pointer; font-weight: 600; }
+  .cell.is-open { outline: 2px solid var(--trace); outline-offset: -2px; }
+
+  .wire {
+    height: 12.5rem; overflow-y: auto; padding: .55rem .8rem;
+    background: var(--paper-sunk); border-bottom: 1px solid var(--rule);
+    font-family: var(--font-mono); font-size: .7rem; line-height: 1.75;
+    scrollbar-width: thin;
+  }
+  .wire__row { display: flex; gap: .6rem; color: var(--muted); animation: arrive .16s ease-out; }
+  .wire__row[data-tone="dead"]  { color: var(--faint); }
+  .wire__row[data-tone="known"] { color: var(--trace); }
+  .wire__row[data-tone="novel"] { color: var(--ink); font-weight: 600; }
+  .wire__dir { color: var(--faint); flex: none; }
+  .wire :global(b) { color: var(--ink); font-weight: 600; }
+  .wire__row[data-tone="known"] :global(b) { color: inherit; }
+
+  @keyframes arrive { from { opacity: 0; transform: translateX(-4px); } to { opacity: 1; transform: none; } }
+
+  .scan__status {
+    margin: 0; padding: .65rem 1.15rem; border-bottom: 1px solid var(--rule);
+    font-size: var(--t-fine); color: var(--muted);
+  }
+  .scan__status :global(b) { color: var(--ink); font-weight: 600; }
+
+  .detail { padding: 1.15rem; display: grid; gap: 1.15rem; }
+  .detail__meta h3 { display: flex; align-items: baseline; gap: .5rem; }
+  .detail__meta h3 code { font-size: 1rem; }
+  .detail__meta p { margin: .55rem 0 0; font-size: var(--t-small); color: var(--muted); max-width: var(--measure); }
+  .detail__tag { color: var(--ink-2); }
+  .detail__tag[data-novel="true"] { color: var(--ink); font-weight: 600; }
+  .detail__layout code { color: var(--ink); }
+
+  .record__title {
+    font-size: var(--t-fine); color: var(--muted); margin-bottom: .6rem;
+    display: flex; flex-wrap: wrap; gap: .5rem; align-items: baseline;
+  }
+  .record__count { font-family: var(--font-mono); color: var(--faint); margin-left: auto; }
+  .record__chart { width: 100%; height: auto; color: var(--trace); display: block; }
+  .record__axis {
+    display: flex; justify-content: space-between; margin-top: .25rem;
+    font-family: var(--font-mono); font-size: var(--t-fine); color: var(--faint);
+  }
+
+  .record__bytes { display: flex; flex-wrap: wrap; gap: 3px; margin-top: .95rem; }
+  .byte {
+    font-family: var(--font-mono); font-size: .7rem; padding: .16rem .28rem;
+    background: var(--paper-sunk); border-radius: 1px; cursor: help;
+    opacity: 0; transform: translateY(3px); transition: opacity .2s, transform .2s;
+  }
+  .byte[data-in="true"] { opacity: 1; transform: none; }
+  .byte[data-zero="true"] { color: var(--paper); background: var(--faint); }
+
+  .record__foot { margin: .8rem 0 0; font-size: var(--t-small); color: var(--muted); max-width: var(--measure); }
+
+  @media (max-width: 680px) {
+    .scan__body { grid-template-columns: 1fr; }
+    .scan__grid { grid-template-columns: repeat(8, 1fr); border-right: 0; }
+    .wire { height: 9.5rem; }
+    .record__count { margin-left: 0; }
+  }
+</style>
