@@ -39,8 +39,22 @@ export default async function CaseStudyPage({
   const study = project ? getCaseStudy(slug) : undefined;
   if (!project || !study) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    abstract: project.value,
+    author: { "@type": "Person", name: site.name },
+    ...(project.repo ? { codeRepository: project.repo } : {}),
+    keywords: project.tech.join(", "),
+  };
+
   return (
     <article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* ── Header ───────────────────────────────────────────────────── */}
       <header className={`${wrap} pt-10 pb-12 sm:pt-14`}>

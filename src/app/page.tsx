@@ -16,9 +16,30 @@ const pipeline = [
 
 const section = "mx-auto max-w-[1200px] px-5 sm:px-8";
 
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  jobTitle: site.role,
+  email: `mailto:${site.email}`,
+  url: site.url || undefined,
+  sameAs: [site.github, site.linkedin],
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "University of Washington",
+  },
+  worksFor: experience
+    .filter((r) => r.end === null)
+    .map((r) => ({ "@type": "Organization", name: r.org })),
+};
+
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <section className={`${section} pt-14 pb-16 sm:pt-20 sm:pb-20`}>
