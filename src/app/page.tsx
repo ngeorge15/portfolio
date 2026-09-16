@@ -1,69 +1,219 @@
-import Image from "next/image";
+import Link from "next/link";
+import { site } from "@/content/site";
+import { projects } from "@/content/projects";
+import { about, credibility, experience } from "@/content/experience";
+import { ProjectCard } from "@/components/ProjectCard";
+import { FlowDiagram } from "@/components/FlowDiagram";
+
+/* The path this work tends to follow, and the organising idea of the site.
+   Legible with no animation; the dot is decoration on top. */
+const pipeline = [
+  { name: "Sensor", detail: "measure" },
+  { name: "Firmware", detail: "batch" },
+  { name: "Cloud", detail: "ingest" },
+  { name: "Application", detail: "decide" },
+];
+
+const section = "mx-auto max-w-[1200px] px-5 sm:px-8";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+
+      {/* ── Hero ─────────────────────────────────────────────────────── */}
+      <section className={`${section} pt-14 pb-16 sm:pt-20 sm:pb-20`}>
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
+          <div className="lg:col-span-7">
+            <h1 className="text-[34px] leading-[1.12] sm:text-[44px] lg:text-[50px]">
+              {site.headline}
+            </h1>
+            <p className="measure mt-5 text-[17px] text-text-2 sm:text-[18px]">
+              {site.supporting}
+            </p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link
+                href="#work"
+                className="inline-flex min-h-11 items-center rounded-sm bg-text px-5 text-[15px] font-medium text-bg transition-opacity duration-200 hover:opacity-90"
+              >
+                View work
+              </Link>
+              <Link
+                href="/resume"
+                className="inline-flex min-h-11 items-center rounded-sm border border-border px-5 text-[15px] font-medium transition-colors duration-200 hover:border-teal"
+              >
+                Résumé
+              </Link>
+              <a
+                href={site.github}
+                className="inline-flex min-h-11 items-center rounded-sm border border-border px-5 text-[15px] font-medium transition-colors duration-200 hover:border-teal"
+              >
+                GitHub
+              </a>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5">
+            <div className="rounded-card border border-border bg-surface p-5">
+              <FlowDiagram
+                steps={pipeline}
+                title="How this work usually flows"
+                animate
+                className="h-auto w-full"
+              />
+              <p className="mt-3 text-center font-mono text-[12px] text-text-2">
+                sensor to screen
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Credibility ──────────────────────────────────────────────── */}
+      <section
+        aria-label="Selected results"
+        className="border-y border-border bg-surface/50"
+      >
+        <div className={`${section} py-10`}>
+          <ul className="grid gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-4">
+            {credibility.map((c) => (
+              <li key={c.label}>
+                <p className="font-mono text-[26px] font-semibold tracking-tight text-teal-text">
+                  {c.figure}
+                </p>
+                <p className="mt-1 text-[14px] text-text-2">{c.label}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ── Work ─────────────────────────────────────────────────────── */}
+      <section id="work" className={`${section} scroll-mt-20 py-16 sm:py-20`}>
+        <h2 className="text-[26px] sm:text-[30px]">Selected work</h2>
+        <p className="measure mt-3 text-[16px] text-text-2">
+          Each visual is an architecture diagram of the system described, not a
+          product screenshot.
+        </p>
+        <div className="mt-9 grid gap-6 lg:grid-cols-2">
+          {projects.map((p) => (
+            <ProjectCard key={p.slug} project={p} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── Experience ───────────────────────────────────────────────── */}
+      <section
+        id="experience"
+        className="scroll-mt-20 border-t border-border bg-surface/50"
+      >
+        <div className={`${section} py-16 sm:py-20`}>
+          <h2 className="text-[26px] sm:text-[30px]">Experience</h2>
+          <ol className="mt-9 space-y-10">
+            {experience.map((r) => (
+              <li
+                key={`${r.org}-${r.title}`}
+                className="grid gap-x-10 gap-y-3 md:grid-cols-12"
+              >
+                <div className="md:col-span-4">
+                  <h3 className="text-[18px]">{r.org}</h3>
+                  <p className="text-[15px] text-text-2">{r.title}</p>
+                  <p className="mt-1 font-mono text-[12px] text-text-2">
+                    {r.start} &ndash; {r.end ?? "Present"}
+                  </p>
+                </div>
+                <div className="md:col-span-8">
+                  <p className="measure text-[16px]">{r.summary}</p>
+                  {r.points.length > 0 && (
+                    <ul className="measure mt-3 space-y-2 text-[15px] text-text-2">
+                      {r.points.map((p) => (
+                        <li key={p} className="flex gap-2.5">
+                          <span
+                            aria-hidden="true"
+                            className="mt-2.5 size-1 shrink-0 rounded-full bg-teal"
+                          />
+                          <span>{p}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* ── About ────────────────────────────────────────────────────── */}
+      <section id="about" className={`${section} scroll-mt-20 py-16 sm:py-20`}>
+        <h2 className="text-[26px] sm:text-[30px]">About</h2>
+        <div className="measure mt-6 space-y-4 text-[17px]">
+          {about.map((p) => (
+            <p key={p}>{p}</p>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Contact ──────────────────────────────────────────────────── */}
+      <section
+        id="contact"
+        className="scroll-mt-20 border-t border-border bg-surface/50"
+      >
+        <div className={`${section} py-16 sm:py-20`}>
+          <h2 className="text-[26px] sm:text-[30px]">Contact</h2>
+          <p className="measure mt-4 text-[17px] text-text-2">
+            {site.availability}
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+          <ul className="mt-7 grid gap-x-10 gap-y-4 sm:grid-cols-2 lg:max-w-3xl">
+            <ContactRow
+              label="Email"
+              href={`mailto:${site.email}`}
+              value={site.email}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <ContactRow
+              label="LinkedIn"
+              href={site.linkedin}
+              value="nikhil-george01"
+            />
+            <ContactRow label="GitHub" href={site.github} value="ngeorge15" />
+            <ContactRow
+              label="Résumé"
+              href="/resume"
+              value="View résumé"
+              internal
+            />
+          </ul>
         </div>
-      </main>
-    </div>
+      </section>
+    </>
+  );
+}
+
+function ContactRow({
+  label,
+  href,
+  value,
+  internal,
+}: {
+  label: string;
+  href: string;
+  value: string;
+  internal?: boolean;
+}) {
+  const cls =
+    "link-underline inline-flex min-h-11 items-center text-[16px] transition-colors duration-200 hover:text-teal-text";
+  return (
+    <li className="flex flex-col">
+      <span className="font-mono text-[12px] text-text-2">{label}</span>
+      {internal ? (
+        <Link href={href} className={cls}>
+          {value}
+        </Link>
+      ) : (
+        <a href={href} className={cls}>
+          {value}
+        </a>
+      )}
+    </li>
   );
 }
