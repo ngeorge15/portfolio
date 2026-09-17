@@ -7,10 +7,9 @@ export const site = {
   monogram: "NG",
   role: "Software Engineer",
 
-  headline:
-    "I build software that connects physical systems, cloud infrastructure, and real-world users.",
+  headline: "I turn noisy signals into systems people can trust.",
   supporting:
-    "Computer Science at the University of Washington. Software Engineer Intern at Societies Insurance and Founding Software Engineer at Gnome.",
+    "I’m a UW computer science student and software engineer working across embedded devices, cloud infrastructure, and human-centered products.",
 
   availability:
     "I'm currently looking for software-engineering opportunities for 2027.",

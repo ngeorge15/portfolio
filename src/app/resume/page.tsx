@@ -19,7 +19,7 @@ export default function ResumePage() {
     <div className="mx-auto max-w-[840px] px-5 py-12 sm:px-8 sm:py-16">
       <header>
         <h1 className="text-[32px] sm:text-[38px]">{site.name}</h1>
-        <p className="mt-2 text-[17px] text-text-2">{site.role}</p>
+        <p className="mt-2 text-[17px] text-text-muted">{site.role}</p>
         <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[15px]">
           <li>
             <a href={`mailto:${site.email}`} className="link-underline">
@@ -42,13 +42,13 @@ export default function ResumePage() {
           <p className="mt-6">
             <a
               href={site.resume.href}
-              className="inline-flex min-h-11 items-center rounded-sm border border-border px-5 text-[15px] font-medium transition-colors duration-200 hover:border-teal"
+              className="inline-flex min-h-11 items-center rounded-sm border border-border px-5 text-[15px] font-medium transition-colors duration-200 hover:border-accent"
             >
               Download PDF
             </a>
           </p>
         ) : (
-          <p className="mt-6 rounded-sm border border-dashed border-border px-4 py-3 text-[14px] text-text-2">
+          <p className="mt-6 rounded-sm border border-dashed border-border px-4 py-3 text-[14px] text-text-muted">
             A downloadable PDF is not linked yet. This page is generated from
             the same content as the rest of the site, so it always reflects
             current roles.
@@ -65,18 +65,18 @@ export default function ResumePage() {
                 <h3 className="text-[17px]">
                   {r.title}, {r.org}
                 </h3>
-                <p className="font-mono text-[12px] text-text-2">
+                <p className="font-mono text-[12px] text-text-muted">
                   {r.start} &ndash; {r.end ?? "Present"}
                 </p>
               </div>
-              <p className="mt-1.5 text-[15px] text-text-2">{r.summary}</p>
+                <p className="mt-1.5 text-[15px] text-text-muted">{r.summary}</p>
               {r.points.length > 0 && (
                 <ul className="mt-2.5 space-y-1.5 text-[15px]">
                   {r.points.map((p) => (
                     <li key={p} className="flex gap-2.5">
                       <span
                         aria-hidden="true"
-                        className="mt-2.5 size-1 shrink-0 rounded-full bg-teal"
+                        className="mt-2.5 size-1 shrink-0 rounded-full bg-accent"
                       />
                       <span>{p}</span>
                     </li>
@@ -106,14 +106,14 @@ export default function ResumePage() {
                 <h3 className="text-[17px]">{p.title}</h3>
                 <Link
                   href={`/work/${p.slug}`}
-                  className="link-underline text-[14px] text-teal-text"
+                  className="link-underline text-[14px] text-accent"
                 >
                   Case study
                 </Link>
               </div>
-              <p className="mt-1.5 text-[15px] text-text-2">{p.value}</p>
+              <p className="mt-1.5 text-[15px] text-text-muted">{p.value}</p>
               <p className="mt-1.5 text-[15px]">{p.proof}</p>
-              <p className="mt-1.5 font-mono text-[12px] text-text-2">
+              <p className="mt-1.5 font-mono text-[12px] text-text-muted">
                 {p.tech.join(", ")}
               </p>
             </li>

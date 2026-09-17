@@ -45,14 +45,14 @@ export function FlowDiagram({
           >
             <div
               className={`flex w-full flex-1 flex-col justify-center rounded-[10px] border bg-surface px-3 py-2.5 text-center @[26rem]:min-h-[64px] ${
-                i === steps.length - 1 ? "border-teal" : "border-border"
+                i === steps.length - 1 ? "border-accent" : "border-border"
               }`}
             >
               <span className="text-[13px] leading-tight font-semibold">
                 {step.name}
               </span>
               {step.detail && (
-                <span className="mt-0.5 font-mono text-[11px] text-text-2">
+                <span className="mt-0.5 font-mono text-[11px] text-text-muted">
                   {step.detail}
                 </span>
               )}
@@ -67,7 +67,7 @@ export function FlowDiagram({
                 <span className="block h-4 w-px bg-border @[26rem]:h-px @[26rem]:w-4" />
                 {animate && (
                   <span
-                    className="telemetry-dot absolute size-[5px] rounded-full bg-teal"
+                    className="telemetry-dot absolute size-[5px] rounded-full bg-accent"
                     style={{ "--step": i } as React.CSSProperties}
                   />
                 )}

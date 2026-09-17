@@ -1,190 +1,76 @@
 @import "tailwindcss";
 
-/* Theme is always explicit on <html data-theme>, resolved before paint by the
-   inline script in layout.tsx, so there is no flash and the toggle can win
-   over the system preference in both directions. */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-:root,
-[data-theme="light"] {
-  --bg: #f6f8f7;
-  --surface: #ffffff;
-  --text: #0b1220;
-  --text-2: #5b6876;
-  --border: #dde4e2;
-
-  /* Brand hues, used for fills, strokes, borders and graphics. */
-  --teal: #17a589;
-  --blue: #3976f6;
-
-  /* Text-safe variants of the same hues. The brand values are 2.90:1 and
-     3.86:1 on --bg, which is below AA for body text, so anything that
-     renders as text uses these instead. */
-  --teal-text: #127f69;
-  --blue-text: #2367f5;
-
-  --hairline: rgba(11, 18, 32, 0.08);
-  --shadow: 0 1px 2px rgba(11, 18, 32, 0.04), 0 4px 12px rgba(11, 18, 32, 0.04);
+:root, [data-theme="light"] {
+  --background: #f3f4ef;
+  --surface: #fbfcf8;
+  --surface-raised: #ffffff;
+  --text: #17201d;
+  --text-muted: #637069;
+  --border: #d8dfda;
+  --accent: #365c4a;
+  --accent-secondary: #5a3d7a;
+  --accent-soft: #e4ece5;
+  --blossom: #d88fa3;
+  --rain: #6f8792;
+  --shadow: 0 12px 30px rgba(23, 32, 29, 0.08);
 }
-
 [data-theme="dark"] {
-  --bg: #081018;
-  --surface: #0e1924;
-  --text: #eaf2f0;
-  --text-2: #9aa9b5;
-  --border: #21303d;
-
-  --teal: #4dd6b4;
-  --blue: #6ea8ff;
-
-  /* Both clear AA on the dark surfaces already. */
-  --teal-text: #4dd6b4;
-  --blue-text: #6ea8ff;
-
-  --hairline: rgba(234, 242, 240, 0.08);
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.25);
+  --background: #101613;
+  --surface: #18211d;
+  --surface-raised: #202b25;
+  --text: #eef1ec;
+  --text-muted: #a7b0a9;
+  --border: #2d3832;
+  --accent: #8dbaa0;
+  --accent-secondary: #b5a3d3;
+  --accent-soft: #26382d;
+  --blossom: #e0a7b6;
+  --rain: #91a9b2;
+  --shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
 }
-
 @theme inline {
-  --color-bg: var(--bg);
+  --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
   --color-text: var(--text);
-  --color-text-2: var(--text-2);
+  --color-text-muted: var(--text-muted);
   --color-border: var(--border);
-  --color-teal: var(--teal);
-  --color-blue: var(--blue);
-  --color-teal-text: var(--teal-text);
-  --color-blue-text: var(--blue-text);
-
+  --color-accent: var(--accent);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-soft: var(--accent-soft);
+  --color-blossom: var(--blossom);
+  --color-rain: var(--rain);
   --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-newsreader);
   --font-mono: var(--font-geist-mono);
-
-  --radius-card: 14px;
+  --radius-card: 18px;
   --radius-sm: 8px;
-
-  /* Every transition on the site uses one of these two. */
   --ease-ui: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-
 @layer base {
-  html {
-    color-scheme: light;
-  }
-  [data-theme="dark"] {
-    color-scheme: dark;
-  }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-    font-size: 17px;
-    line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4 {
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.15;
-    text-wrap: balance;
-  }
-
-  /* Visible focus everywhere, never removed. */
-  :focus-visible {
-    outline: 2px solid var(--blue-text);
-    outline-offset: 2px;
-    border-radius: 3px;
-  }
-
-  ::selection {
-    background: var(--teal);
-    color: var(--bg);
-  }
-
-  /* Long-form prose is held to a comfortable measure. */
-  .measure {
-    max-width: 68ch;
-  }
-  .measure-tight {
-    max-width: 60ch;
-  }
+  html { color-scheme: light; scroll-behavior: smooth; }
+  [data-theme="dark"] { color-scheme: dark; }
+  body { background: var(--background); color: var(--text); font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.025em; line-height: 1.1; text-wrap: balance; }
+  h1, h2 { font-family: var(--font-newsreader), Georgia, serif; }
+  :focus-visible { outline: 2px solid var(--accent-secondary); outline-offset: 3px; border-radius: 3px; }
+  ::selection { background: var(--blossom); color: var(--text); }
+  .measure { max-width: 68ch; }
+  .measure-tight { max-width: 60ch; }
 }
-
 @layer utilities {
-  /* Card lift is the one repeated motion on the site. */
-  .card-lift {
-    transition:
-      transform 200ms var(--ease-ui),
-      border-color 200ms var(--ease-ui),
-      box-shadow 200ms var(--ease-ui);
-  }
-  @media (hover: hover) {
-    .card-lift:hover {
-      transform: translateY(-2px);
-      border-color: color-mix(in oklab, var(--teal) 45%, var(--border));
-      box-shadow: var(--shadow);
-    }
-  }
-
-  .link-underline {
-    text-decoration: underline;
-    text-decoration-color: color-mix(in oklab, currentColor 35%, transparent);
-    text-underline-offset: 3px;
-    transition: text-decoration-color 200ms var(--ease-ui);
-  }
-  .link-underline:hover {
-    text-decoration-color: currentColor;
-  }
+  .link-underline { text-decoration: underline; text-decoration-color: color-mix(in oklab, currentColor 35%, transparent); text-underline-offset: 3px; transition: text-decoration-color 200ms var(--ease-ui), color 200ms var(--ease-ui); }
+  .link-underline:hover { text-decoration-color: currentColor; }
+  .field-note { font-family: var(--font-geist-mono), monospace; font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; }
+  .topo-motif { background-image: repeating-radial-gradient(ellipse at 70% 30%, transparent 0 26px, color-mix(in oklab, var(--rain) 14%, transparent) 27px 28px, transparent 29px 43px); }
+  .card-lift { transition: transform 200ms var(--ease-ui), border-color 200ms var(--ease-ui), box-shadow 200ms var(--ease-ui); }
+  @media (hover: hover) { .card-lift:hover { transform: translateY(-2px); border-color: color-mix(in oklab, var(--accent) 45%, var(--border)); box-shadow: var(--shadow); } }
 }
-
+@keyframes signal-drift { from { stroke-dashoffset: 80; } to { stroke-dashoffset: 0; } }
+.signal-trace { stroke-dasharray: 5 9; animation: signal-drift 6s linear infinite; }
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  .card-lift:hover {
-    transform: none;
-  }
-}
-
-/* The hero's one piece of ambient motion: a reading moving down the
-   pipeline, one connector at a time. Purely decorative — the diagram reads
-   identically without it — and it is removed entirely under reduced motion.
-   Direction-agnostic, so it works whether the diagram is stacked or in a
-   row. */
-@keyframes telemetry-pulse {
-  0%,
-  100% {
-    opacity: 0;
-    transform: scale(0.6);
-  }
-  12%,
-  26% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  42% {
-    opacity: 0;
-    transform: scale(0.6);
-  }
-}
-
-.telemetry-dot {
-  animation: telemetry-pulse 3.6s var(--ease-ui) infinite;
-  animation-delay: calc(var(--step, 0) * 0.42s);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .telemetry-dot {
-    display: none;
-  }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  .card-lift:hover { transform: none; }
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import { Geist, Geist_Mono } from "next/font/google";
 import { site } from "@/content/site";
 import { Header } from "@/components/Header";
@@ -9,6 +10,12 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+const newsreader = localFont({
+  src: "../../public/fonts/newsreader.ttf",
+  variable: "--font-newsreader",
+  display: "swap",
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -58,11 +65,11 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} flex min-h-dvh flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} flex min-h-dvh flex-col`}
       >
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-sm focus:bg-text focus:px-4 focus:py-2 focus:text-bg"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-sm focus:bg-text focus:px-4 focus:py-2 focus:text-background"
         >
           Skip to content
         </a>

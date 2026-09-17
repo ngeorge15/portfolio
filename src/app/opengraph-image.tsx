@@ -14,9 +14,9 @@ export default function OpengraphImage() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        background: "#081018",
+        background: "#101613",
         padding: "72px",
-        color: "#EAF2F0",
+        color: "#EEF1EC",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -27,9 +27,9 @@ export default function OpengraphImage() {
             justifyContent: "center",
             width: 44,
             height: 44,
-            border: "1px solid #21303D",
+            border: "1px solid #2D3832",
             borderRadius: 8,
-            color: "#4DD6B4",
+            color: "#8DBAA0",
             fontSize: 18,
           }}
         >
@@ -50,9 +50,9 @@ export default function OpengraphImage() {
         {site.headline}
       </div>
 
-      {/* The same sensor-to-screen pipeline the site is organised around. */}
+      {/* The same thesis the site is organised around. */}
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-        {["Sensor", "Firmware", "Cloud", "Application"].map((label, i) => (
+        {["Signal", "System", "Decision"].map((label, i) => (
           <div
             key={label}
             style={{ display: "flex", alignItems: "center", gap: 14 }}
@@ -61,22 +61,22 @@ export default function OpengraphImage() {
               style={{
                 display: "flex",
                 padding: "10px 20px",
-                border: `1px solid ${i === 3 ? "#4DD6B4" : "#21303D"}`,
+                border: `1px solid ${i === 2 ? "#8DBAA0" : "#2D3832"}`,
                 borderRadius: 10,
-                background: "#0E1924",
+                background: "#18211D",
                 fontSize: 22,
-                color: i === 3 ? "#4DD6B4" : "#9AA9B5",
+                color: i === 2 ? "#8DBAA0" : "#A7B0A9",
               }}
             >
               {label}
             </div>
-            {i < 3 && (
+            {i < 2 && (
               <div
                 style={{
                   display: "flex",
                   width: 26,
                   height: 1,
-                  background: "#21303D",
+                  background: "#2D3832",
                 }}
               />
             )}
