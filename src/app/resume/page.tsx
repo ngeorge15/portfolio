@@ -10,10 +10,7 @@ export const metadata: Metadata = {
   ...(site.url ? { alternates: { canonical: "/resume" } } : {}),
 };
 
-/* Built from the same content the rest of the site uses, so it cannot drift
-   out of date the way a checked-in PDF does. A download is offered only
-   once a current file exists; the newest one on disk predates the Societies
-   Insurance role, so linking it would publish something already wrong. */
+/* Built from the same content the rest of the site uses, so it stays current. */
 export default function ResumePage() {
   return (
     <div className="mx-auto max-w-[840px] px-5 py-12 sm:px-8 sm:py-16">
@@ -38,7 +35,7 @@ export default function ResumePage() {
           </li>
         </ul>
 
-        {site.resume.available ? (
+        {site.resume.available && (
           <p className="mt-6">
             <a
               href={site.resume.href}
@@ -46,12 +43,6 @@ export default function ResumePage() {
             >
               Download PDF
             </a>
-          </p>
-        ) : (
-          <p className="mt-6 rounded-sm border border-dashed border-border px-4 py-3 text-[14px] text-text-muted">
-            A downloadable PDF is not linked yet. This page is generated from
-            the same content as the rest of the site, so it always reflects
-            current roles.
           </p>
         )}
       </header>

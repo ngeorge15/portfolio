@@ -26,10 +26,10 @@ export const experience: Role[] = [
     start: "Sep 2026",
     end: null,
     summary:
-      "Building internal software alongside the engineering team, currently in active development.",
+      "Working on internal software with the engineering team; the work is ongoing.",
     points: [
-      "Developing application features against an existing production codebase.",
-      "Implementing changes through the team's review, testing and release process.",
+      "Architecting a relational model that separates shared policy fields from flexible product-specific details across 30+ insurance product lines and 47+ carrier/MGA relationships.",
+      "Designing a canonical-to-carrier field-mapping layer and a staged intake, migration and administrative review workflow with Django, PostgreSQL and AWS.",
     ],
     needsDetail: true,
   },
@@ -53,9 +53,11 @@ export const experience: Role[] = [
     title: "Undergraduate Researcher",
     start: "Jan 2025",
     end: "Jun 2025",
-    summary: "Undergraduate research appointment.",
-    points: [],
-    needsDetail: true,
+    summary:
+      "Researching braid theory with finite automata and custom domain-specific languages.",
+    points: [
+      "Built visualization tools for mathematical structures and used computer-vision verification to check generated results.",
+    ],
   },
 ];
 
@@ -82,7 +84,31 @@ export const credibility = [
 ] as const;
 
 export const about = [
-  "I started in healthcare as a CNA. The work was direct and the impact was immediate, but it was bounded by what one person could do in a shift.",
-  "I moved into computer science because software scales differently. The same care can be built into a system once and reach far more people than I could reach on a floor.",
-  "What I like building sits between software and the physical world: firmware that has to survive a battery budget, a backend that has to make sense of noisy sensor data, an interface someone actually uses to decide something. Most of my work has ended up somewhere on that path from a sensor to a screen.",
+  "I started in healthcare as a CNA, then moved into computer science to build systems with broader reach.",
+  "I’m particularly interested in software that connects physical devices, data, and the decisions people make from them.",
 ] as const;
+
+export const education = {
+  school: "University of Washington",
+  degree: "B.S. Computer Science",
+  dates: "September 2023 – June 2027",
+  location: "Seattle, Washington",
+  coursework: [
+    "Operating Systems",
+    "Machine Learning",
+    "Systems Programming",
+    "Data Structures and Parallelism",
+    "Databases",
+    "Hardware/Software Interface",
+    "Software Design",
+    "Digital Design",
+    "Computational Biology",
+  ],
+} as const;
+
+export const skills = {
+  Languages: ["Java", "Python", "C", "C++", "JavaScript", "TypeScript", "SQL"],
+  "Frameworks and Product": ["React", "React Native", "Flask", "Django", "Node.js"],
+  "Cloud and Data": ["AWS Lambda", "API Gateway", "SQS", "S3", "RDS", "MySQL", "PostgreSQL", "MongoDB", "SQLite"],
+  "Embedded and Tools": ["ESP32-C6", "ADC", "I2C", "LittleFS", "Git", "Docker", "Linux", "Windows", "Claude Code + Codex"],
+} as const;

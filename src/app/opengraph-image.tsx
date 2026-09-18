@@ -50,9 +50,9 @@ export default function OpengraphImage() {
         {site.headline}
       </div>
 
-      {/* The same thesis the site is organised around. */}
+      {/* A compact summary of the engineering range. */}
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-        {["Signal", "System", "Decision"].map((label, i) => (
+        {["Embedded", "Cloud", "Products"].map((label, i) => (
           <div
             key={label}
             style={{ display: "flex", alignItems: "center", gap: 14 }}
@@ -61,11 +61,11 @@ export default function OpengraphImage() {
               style={{
                 display: "flex",
                 padding: "10px 20px",
-                border: `1px solid ${i === 2 ? "#8DBAA0" : "#2D3832"}`,
+                border: `1px solid ${i === 2 ? "#76B1E2" : "#30404F"}`,
                 borderRadius: 10,
                 background: "#18211D",
                 fontSize: 22,
-                color: i === 2 ? "#8DBAA0" : "#A7B0A9",
+                color: i === 2 ? "#76B1E2" : "#AAB6C2",
               }}
             >
               {label}
@@ -76,7 +76,7 @@ export default function OpengraphImage() {
                   display: "flex",
                   width: 26,
                   height: 1,
-                  background: "#2D3832",
+                  background: "#30404F",
                 }}
               />
             )}

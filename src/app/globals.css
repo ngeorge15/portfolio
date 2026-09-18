@@ -2,75 +2,84 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-:root, [data-theme="light"] {
-  --background: #f3f4ef;
-  --surface: #fbfcf8;
+:root, [data-theme="dark"] {
+  --background: #070a0f;
+  --background-secondary: #0b1119;
+  --surface: #101823;
+  --surface-raised: #151f2d;
+  --text: #f4f7fa;
+  --text-muted: #9aa7b5;
+  --text-subtle: #687789;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --accent: #68c6c3;
+  --accent-soft: rgba(104, 198, 195, 0.12);
+  --accent-glow: rgba(104, 198, 195, 0.18);
+  --shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+}
+
+[data-theme="light"] {
+  --background: #f5f7fa;
+  --background-secondary: #edf1f5;
+  --surface: #ffffff;
   --surface-raised: #ffffff;
-  --text: #17201d;
-  --text-muted: #637069;
-  --border: #d8dfda;
-  --accent: #365c4a;
-  --accent-secondary: #5a3d7a;
-  --accent-soft: #e4ece5;
-  --blossom: #d88fa3;
-  --rain: #6f8792;
-  --shadow: 0 12px 30px rgba(23, 32, 29, 0.08);
+  --text: #17202b;
+  --text-muted: #5f6b78;
+  --text-subtle: #738091;
+  --border: rgba(23, 32, 43, 0.12);
+  --border-strong: rgba(23, 32, 43, 0.2);
+  --accent: #167f86;
+  --accent-soft: rgba(22, 127, 134, 0.1);
+  --accent-glow: rgba(22, 127, 134, 0.13);
+  --shadow: 0 12px 30px rgba(23, 32, 43, 0.09);
 }
-[data-theme="dark"] {
-  --background: #101613;
-  --surface: #18211d;
-  --surface-raised: #202b25;
-  --text: #eef1ec;
-  --text-muted: #a7b0a9;
-  --border: #2d3832;
-  --accent: #8dbaa0;
-  --accent-secondary: #b5a3d3;
-  --accent-soft: #26382d;
-  --blossom: #e0a7b6;
-  --rain: #91a9b2;
-  --shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-}
+
 @theme inline {
   --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
   --color-text: var(--text);
   --color-text-muted: var(--text-muted);
+  --color-text-subtle: var(--text-subtle);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-accent: var(--accent);
-  --color-accent-secondary: var(--accent-secondary);
   --color-accent-soft: var(--accent-soft);
-  --color-blossom: var(--blossom);
-  --color-rain: var(--rain);
   --font-sans: var(--font-geist-sans);
-  --font-display: var(--font-newsreader);
   --font-mono: var(--font-geist-mono);
-  --radius-card: 18px;
-  --radius-sm: 8px;
+  --radius-card: 10px;
+  --radius-sm: 5px;
   --ease-ui: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
+
 @layer base {
-  html { color-scheme: light; scroll-behavior: smooth; }
-  [data-theme="dark"] { color-scheme: dark; }
-  body { background: var(--background); color: var(--text); font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
-  h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.025em; line-height: 1.1; text-wrap: balance; }
-  h1, h2 { font-family: var(--font-newsreader), Georgia, serif; }
-  :focus-visible { outline: 2px solid var(--accent-secondary); outline-offset: 3px; border-radius: 3px; }
-  ::selection { background: var(--blossom); color: var(--text); }
+  html { color-scheme: dark; scroll-behavior: smooth; }
+  [data-theme="light"] { color-scheme: light; }
+  body { background: var(--background); color: var(--text); font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  h1, h2, h3, h4 { font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; font-weight: 650; letter-spacing: -0.025em; line-height: 1.12; text-wrap: balance; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+  ::selection { background: var(--accent); color: var(--background); }
   .measure { max-width: 68ch; }
   .measure-tight { max-width: 60ch; }
 }
+
 @layer utilities {
   .link-underline { text-decoration: underline; text-decoration-color: color-mix(in oklab, currentColor 35%, transparent); text-underline-offset: 3px; transition: text-decoration-color 200ms var(--ease-ui), color 200ms var(--ease-ui); }
   .link-underline:hover { text-decoration-color: currentColor; }
-  .field-note { font-family: var(--font-geist-mono), monospace; font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; }
-  .topo-motif { background-image: repeating-radial-gradient(ellipse at 70% 30%, transparent 0 26px, color-mix(in oklab, var(--rain) 14%, transparent) 27px 28px, transparent 29px 43px); }
+  .field-note { font-family: var(--font-geist-mono), monospace; font-size: 0.7rem; letter-spacing: 0.02em; }
+  .surface-glow { background-image: radial-gradient(circle at 80% 10%, var(--accent-glow), transparent 34%), linear-gradient(135deg, var(--surface), var(--background-secondary)); }
+  .hero-glow { background-image: radial-gradient(circle at 78% 35%, var(--accent-glow), transparent 32%), radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.04), transparent 28%); }
+  .edge-line { background: linear-gradient(90deg, transparent, var(--border-strong), transparent); height: 1px; }
   .card-lift { transition: transform 200ms var(--ease-ui), border-color 200ms var(--ease-ui), box-shadow 200ms var(--ease-ui); }
-  @media (hover: hover) { .card-lift:hover { transform: translateY(-2px); border-color: color-mix(in oklab, var(--accent) 45%, var(--border)); box-shadow: var(--shadow); } }
+  @media (hover: hover) { .card-lift:hover { transform: translateY(-3px); border-color: color-mix(in oklab, var(--accent) 52%, var(--border)); box-shadow: var(--shadow); } }
 }
-@keyframes signal-drift { from { stroke-dashoffset: 80; } to { stroke-dashoffset: 0; } }
-.signal-trace { stroke-dasharray: 5 9; animation: signal-drift 6s linear infinite; }
+
+@keyframes rise-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.hero-rise { animation: rise-in 600ms var(--ease-ui) both; }
+.hero-rise-delay { animation: rise-in 600ms 100ms var(--ease-ui) both; }
+.hero-rise-delay-2 { animation: rise-in 600ms 180ms var(--ease-ui) both; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-  .card-lift:hover { transform: none; }
 }

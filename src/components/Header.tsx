@@ -23,39 +23,26 @@ export function Header() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-5 py-2 sm:px-8">
-        <Link href="/" className="flex min-h-11 flex-col justify-center leading-tight" onClick={() => setOpen(false)}>
-          <span className="font-medium tracking-tight">{site.name}</span>
-          <span className="hidden font-mono text-[10px] text-text-muted sm:block">Seattle · UW Computer Science</span>
+    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
+      <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-5 py-2 sm:px-8">
+        <Link href="/" className="flex min-h-11 items-center gap-3" onClick={() => setOpen(false)}>
+          <span className="grid size-8 place-items-center rounded-sm border border-border-strong font-mono text-[11px] text-accent">{site.monogram}</span>
+          <span className="hidden text-[15px] font-medium tracking-tight sm:inline">{site.name}</span>
         </Link>
         <div className="flex items-center">
-          <nav aria-label="Primary" className="hidden items-center md:flex">
+          <nav aria-label="Primary" className="hidden items-center lg:flex">
             <ul className="flex items-center">
-              {nav.map((n) => <li key={n.href}><Link href={n.href} className="flex min-h-11 items-center px-3 text-[14px] text-text-muted transition-colors hover:text-accent">{n.label}</Link></li>)}
+              {nav.map((item) => <li key={item.href}><Link href={item.href} className="flex min-h-11 items-center px-2.5 text-[13px] text-text-muted transition-colors hover:text-accent">{item.label}</Link></li>)}
             </ul>
+            <a href={site.github} className="ml-2 flex min-h-11 items-center px-2.5 text-[13px] text-text-muted transition-colors hover:text-accent">GitHub</a>
           </nav>
           <ThemeToggle />
-          <button
-            type="button"
-            className="grid size-11 place-items-center rounded-sm text-text-muted md:hidden"
-            aria-label={open ? "Close navigation menu" : "Open navigation menu"}
-            aria-expanded={open}
-            aria-controls="mobile-navigation"
-            ref={menuButton}
-            onClick={() => setOpen((value) => !value)}
-          >
+          <button ref={menuButton} type="button" className="grid size-11 place-items-center rounded-sm text-text-muted lg:hidden" aria-label={open ? "Close navigation menu" : "Open navigation menu"} aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen((value) => !value)}>
             <span aria-hidden="true" className="field-note">{open ? "Close" : "Menu"}</span>
           </button>
         </div>
       </div>
-      {open && (
-        <nav id="mobile-navigation" aria-label="Mobile primary" className="border-t border-border bg-surface px-5 py-3 md:hidden">
-          <ul className="mx-auto max-w-[1200px]">
-            {nav.map((n, index) => <li key={n.href}><Link ref={index === 0 ? firstLink : undefined} href={n.href} onClick={() => setOpen(false)} className="flex min-h-11 items-center text-[16px] text-text-muted hover:text-accent">{n.label}</Link></li>)}
-          </ul>
-        </nav>
-      )}
+      {open && <nav id="mobile-navigation" aria-label="Mobile primary" className="border-t border-border bg-surface px-5 py-3 lg:hidden"><ul className="mx-auto max-w-[1180px]">{nav.map((item, index) => <li key={item.href}><Link ref={index === 0 ? firstLink : undefined} href={item.href} onClick={() => setOpen(false)} className="flex min-h-11 items-center text-[15px] text-text-muted hover:text-accent">{item.label}</Link></li>)}<li><a href={site.github} onClick={() => setOpen(false)} className="flex min-h-11 items-center text-[15px] text-text-muted hover:text-accent">GitHub</a></li></ul></nav>}
     </header>
   );
 }

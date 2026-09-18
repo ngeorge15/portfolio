@@ -14,12 +14,12 @@ export default function NotFound() {
       <div className="mt-8 flex flex-wrap gap-3">
         <Link
           href="/"
-          className="inline-flex min-h-11 items-center rounded-sm bg-text px-5 text-[15px] font-medium text-background transition-opacity duration-200 hover:opacity-90"
+          className="inline-flex min-h-11 items-center rounded-sm bg-accent px-5 text-[15px] font-medium text-background transition-opacity duration-200 hover:opacity-90"
         >
           Go home
         </Link>
         <Link
-          href="/#work"
+          href="/#projects"
           className="inline-flex min-h-11 items-center rounded-sm border border-border px-5 text-[15px] font-medium transition-colors duration-200 hover:border-accent"
         >
           View work

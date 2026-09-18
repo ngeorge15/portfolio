@@ -18,9 +18,29 @@ export interface Project {
   /** Which diagram component renders as this project's visual. */
   visual: "ring" | "gnome" | "market" | "calorie";
   featured: boolean;
+  stats?: { label: string; value: string }[];
 }
 
 export const projects: Project[] = [
+  {
+    slug: "gnome",
+    title: "Gnome",
+    value:
+      "A connected plant-care system: a custom ESP32-C6 sensor board reporting to an AWS backend that turns readings into specific care guidance.",
+    role: "Founding Software Engineer: firmware, cloud, data, product, frontend",
+    tech: ["ESP32-C6", "AWS Lambda", "MySQL", "React", "TypeScript"],
+    proof:
+      "1st Place and $20,000 at the Harriet Stephenson Business Plan Competition",
+    repo: null,
+    demo: null,
+    visual: "gnome",
+    featured: false,
+    stats: [
+      { label: "Sensor inputs", value: "5" },
+      { label: "Collection cycle", value: "15 min" },
+      { label: "Competition", value: "1st place · $20K" },
+    ],
+  },
   {
     slug: "smart-ring",
     title: "Personal Smart Ring Platform",
@@ -32,33 +52,6 @@ export const projects: Project[] = [
     repo: "https://github.com/ngeorge15/smart-ring",
     demo: null,
     visual: "ring",
-    featured: true,
-  },
-  {
-    slug: "gnome",
-    title: "Gnome",
-    value:
-      "A connected plant-care system: a custom ESP32-C6 sensor board reporting to an AWS backend that turns readings into specific care guidance.",
-    role: "Founding Software Engineer: firmware, cloud, data, product, frontend",
-    tech: ["ESP32-C6", "AWS Lambda", "MySQL", "React", "TypeScript"],
-    proof:
-      "1st Place and $20K at the Harriet Stephenson Business Plan Competition",
-    repo: null,
-    demo: null,
-    visual: "gnome",
-    featured: true,
-  },
-  {
-    slug: "prediction-market-bot",
-    title: "Prediction Market Trading Bot",
-    value:
-      "A research system that builds independent probability estimates for prediction markets and measures whether they are actually calibrated.",
-    role: "Solo: data pipeline, modelling, validation harness",
-    tech: ["Python", "scikit-learn", "pandas", "NumPy", "SQLite"],
-    proof: "Calibration error below 0.05 on held-out sets",
-    repo: null,
-    demo: null,
-    visual: "market",
     featured: true,
   },
   {
@@ -74,6 +67,19 @@ export const projects: Project[] = [
     demo: null,
     visual: "calorie",
     featured: true,
+  },
+  {
+    slug: "prediction-market-bot",
+    title: "Prediction Market Trading Bot",
+    value:
+      "A research system that builds independent probability estimates for prediction markets and measures whether they are actually calibrated.",
+    role: "Solo: data pipeline, modelling, validation harness",
+    tech: ["Python", "scikit-learn", "pandas", "NumPy", "SQLite"],
+    proof: "Calibration error below 0.05 on held-out sets",
+    repo: null,
+    demo: null,
+    visual: "market",
+    featured: false,
   },
 ];
 
